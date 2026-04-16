@@ -1,0 +1,85 @@
+# ============================================================
+# Domain Constraints (도메인 제약조건)
+# researcher/urban-engineer가 작성, data-analyst/vision-engineer가 참조
+# ============================================================
+# 역방향 지식 채널: 도메인 전문가 → 데이터/모델 스킬
+# data-analyst는 프로파일링 시 이 파일의 constraints를 자동 참조하여
+# 범위 초과/위반 데이터를 플래그한다.
+# ============================================================
+
+version: 1.0
+last_updated: "2026-04-16"
+maintainers: [researcher, urban-engineer]
+consumers: [data-analyst, vision-engineer, ml-engineer]
+
+# --- 교통량 데이터 ---
+traffic:
+  - field: volume
+    rule: "x >= 0"
+    unit: "대/시"
+    note: "음수 불가. 0은 관측 장비 장애 가능성 있으므로 플래그"
+    source: "도로용량편람"
+
+  - field: speed_kmh
+    rule: "0 <= x <= 200"
+    unit: "km/h"
+    note: "200 초과 시 센서 오류 의심. 고속도로 설계속도 120km/h 기준"
+    source: "도로교통법 시행규칙"
+
+  - field: occupancy
+    rule: "0 <= x <= 100"
+    unit: "%"
+    note: "검지기 점유율. 100% 초과 시 장비 오류"
+    source: "VDS 데이터 표준"
+
+  - field: headway
+    rule: "x > 0"
+    unit: "초"
+    note: "차두시간. 0 이하 불가"
+    source: "교통공학원론"
+
+  - field: density
+    rule: "0 <= x <= 200"
+    unit: "대/km"
+    note: "교통 밀도. jam density 기준 약 150~200"
+    source: "도로용량편람"
+
+# --- CCTV 차종분류 ---
+vehicle_classification:
+  - field: vehicle_type
+    rule: "value in ['승용', '버스', '트럭', '이륜', '특수', '승합', '경차']"
+    note: "7종 분류 기준 (CCTV 차종분류 프로젝트)"
+    source: "MOLIT 13종 → 7종 매핑"
+
+  - field: confidence
+    rule: "0 <= x <= 1"
+    note: "분류 신뢰도. 0.5 미만 시 수동 검토 대상"
+    source: "프로젝트 기준"
+
+  - field: bbox_area_ratio
+    rule: "0.001 <= x <= 0.5"
+    note: "이미지 대비 bbox 면적 비율. 너무 작으면 미탐지, 너무 크면 오탐"
+    source: "vision-engineer 경험값"
+
+# --- 시간/날짜 ---
+temporal:
+  - field: hour
+    rule: "0 <= x <= 23"
+    note: "시간대"
+
+  - field: peak_hours
+    rule: "value in [7,8,9,17,18,19]"
+    note: "출퇴근 피크시간. 피크 기준 정규화 시 참조"
+    source: "국가교통DB"
+
+  - field: date
+    rule: "format == 'YYYY-MM-DD'"
+    note: "날짜 형식 통일"
+
+# ============================================================
+# 사용 규칙:
+# 1. researcher/urban-engineer만 이 파일 수정 (도메인 권위)
+# 2. data-analyst는 프로파일링 시 자동 참조 — 위반 시 플래그
+# 3. vision-engineer는 탐지/분류 결과 후처리 시 참조
+# 4. 새 프로젝트/데이터셋 추가 시 해당 섹션 append
+# ============================================================

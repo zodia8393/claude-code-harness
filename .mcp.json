@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "arena": {
+      "command": "python3",
+      "args": [".claude/mcp-servers/arena_server.py"],
+      "env": {}
+    }
+  }
+}

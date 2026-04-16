@@ -1,0 +1,64 @@
+name: code_implementation
+owner: admin
+version: 1.2
+trigger: ["코드 구현", "기능 개발", "코드 작성"]
+description: "기능 구현부터 리뷰·검증까지 전체 개발 파이프라인"
+handoff_enabled: true        # v1.1: 스킬 간 핸드오프 봉투 자동 생성
+
+entry_conditions:
+  - requirement_defined       # 요구사항이 명확함
+  - target_files_identified   # 수정 대상 파일이 식별됨
+
+exit_conditions:
+  - code_committed            # 코드가 커밋됨
+  - review_passed             # 리뷰 통과
+  - qa_checkpoint_passed      # QA 체크포인트 통과
+
+fallback:
+  - notify_user               # 실패 시 사용자에게 알림
+
+steps:
+  # --- Tier 3: 조기 검증 (설계 산출물 사전 리뷰) ---
+  - skill: architect
+    mode: 설계검토
+    handoff: true
+    optional: true            # 설계 단계가 있는 경우에만 실행
+    description: "구현 전 설계 산출물(스키마, API 명세) 생성"
+
+  - skill: qa
+    mode: 설계검증
+    gate: false
+    handoff: true
+    optional: true            # architect 단계가 실행된 경우에만
+    on_reject: architect
+    max_iterations: 1
+    description: "[조기 검증] 설계 산출물의 구조적 결함 사전 차단"
+
+  # --- 구현 ---
+  - skill: developer
+    mode: 구현
+    handoff: true
+    description: "요청 기능 구현 (ralph-loop 자동 적용)"
+
+  - skill: developer
+    mode: 정리
+    handoff: true
+    description: "코드 정리 — 중복·품질·효율 검토 후 수정"
+
+  - skill: developer
+    mode: 리뷰
+    handoff: true
+    description: "정확성·보안·성능·유지보수성 체크리스트 기반 리뷰"
+
+  - skill: qa
+    mode: 코드검증
+    gate: true
+    handoff: true
+    on_reject: developer      # reject 시 developer로 피드백
+    max_iterations: 2
+    description: "[강제 체크포인트] 엣지케이스·회귀·보안 최종 검증"
+
+  - skill: commit
+    description: "변경사항 자동 커밋"
+
+on_failure: notify_user

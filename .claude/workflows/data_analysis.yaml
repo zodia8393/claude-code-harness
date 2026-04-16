@@ -1,0 +1,46 @@
+name: data_analysis
+owner: admin
+version: 1.1
+trigger: ["데이터 분석", "데이터 프로파일링", "데이터 탐색"]
+description: "데이터 탐색부터 보고서 작성까지 분석 파이프라인"
+handoff_enabled: true
+
+entry_conditions:
+  - data_source_accessible    # 데이터 소스 접근 가능
+  - analysis_goal_defined     # 분석 목적이 명확함
+
+exit_conditions:
+  - report_generated          # 보고서 생성됨
+  - data_quality_verified     # 데이터 품질 검증됨
+
+fallback:
+  - notify_user
+
+steps:
+  - skill: data-analyst
+    mode: 프로파일링
+    output: data_report
+    handoff: true
+    description: "기본통계·품질검사·이상치 종합 보고"
+
+  - skill: data-analyst
+    mode: SQL
+    input: data_report
+    handoff: true
+    description: "필요 시 SQL 쿼리 생성 및 실행"
+
+  - skill: qa
+    mode: 데이터검증
+    gate: true
+    handoff: true
+    on_reject: data-analyst
+    max_iterations: 2
+    description: "[강제 체크포인트] 데이터 무결성·품질 최종 검증"
+
+  - skill: project-manager
+    mode: 보고서
+    input: data_report
+    handoff: true
+    description: "분석 결과 보고서 작성"
+
+on_failure: notify_user

@@ -1,0 +1,28 @@
+# Schedule configuration example
+# Copy to config.yaml and customize
+
+settings:
+  working_directory: "."           # Project root
+  log_directory: ".claude/schedules/logs"
+  max_execution_minutes: 10
+  log_retention_days: 30
+  skip_holidays: false             # Set true + pip install holidays for KR holidays
+
+schedules:
+  - name: "daily-cleanup"
+    enabled: true
+    prompt: "/admin 디렉토리 정리"
+    schedule:
+      type: weekly
+      days: [mon]
+      time: "10:00"
+    timeout_minutes: 5
+
+  - name: "code-evolve"
+    enabled: true
+    prompt: "/developer 코드 진화 진단 실행"
+    schedule:
+      type: monthly
+      days_of_month: [1, 15]
+      time: "09:00"
+    timeout_minutes: 15

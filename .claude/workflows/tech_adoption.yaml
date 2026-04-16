@@ -1,0 +1,48 @@
+name: tech_adoption
+owner: admin
+version: 1.1
+trigger: ["기술 도입", "새 기술", "tech adoption"]
+description: "기술 조사부터 스킬 회의·ADR까지 기술 도입 의사결정 파이프라인"
+handoff_enabled: true
+
+entry_conditions:
+  - adoption_need_identified  # 기술 도입 필요성 확인됨
+  - current_stack_documented  # 현재 기술 스택 파악됨
+
+exit_conditions:
+  - adr_written               # ADR 문서 작성됨
+  - decision_logged           # decisions.log에 기록됨
+
+fallback:
+  - notify_user
+
+steps:
+  - skill: researcher
+    mode: 기술조사
+    output: tech_report
+    handoff: true
+    description: "기술 조사 및 비교 분석"
+
+  - skill: architect
+    mode: 의존성분석
+    input: tech_report
+    gate: true
+    handoff: true
+    on_reject: researcher
+    max_iterations: 2
+    description: "[강제 체크포인트] 기존 아키텍처와 호환성·의존성 검증"
+
+  - skill: meeting
+    participants: [architect, developer, qa]
+    lead: architect
+    input: tech_report
+    gate: true
+    handoff: true
+    description: "기술 도입 여부 스킬 회의"
+
+  - skill: architect
+    mode: ADR
+    handoff: true
+    description: "기술 결정 문서 작성 (ADR) → decisions.log 기록"
+
+on_failure: notify_user

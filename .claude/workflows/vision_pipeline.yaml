@@ -1,0 +1,67 @@
+name: vision_pipeline
+owner: admin
+version: 1.0
+trigger: ["영상 분석", "CCTV 분석", "차종 분류", "객체 탐지", "CV 파이프라인"]
+description: "CCTV 영상 → 탐지 → 추적 → 분류 → 집계 → 보고 전체 파이프라인"
+handoff_enabled: true
+
+entry_conditions:
+  - video_or_images_available   # 영상/이미지 데이터 존재
+  - classification_goal_defined # 분류 기준(차종 등) 정의됨
+
+exit_conditions:
+  - labels_finalized            # 최종 라벨 확정
+  - metrics_recorded            # 성능 지표 기록됨
+  - report_generated            # 결과 보고서 생성됨
+
+fallback:
+  - qa_review
+
+steps:
+  # --- 도메인 기준 정의 ---
+  - skill: urban-engineer
+    mode: 전문가자문
+    handoff: true
+    optional: true
+    description: "차종 분류 기준 정의 (13종/7종 매핑, 도로교통법 기준)"
+
+  # --- 영상 전처리 + 탐지 + 분류 ---
+  - skill: vision-engineer
+    mode: 파이프라인
+    handoff: true
+    description: "전처리 → 탐지 → 추적 → 분류 end-to-end 실행"
+
+  # --- 모델 학습 (필요 시) ---
+  - skill: ml-engineer
+    mode: 학습
+    handoff: true
+    optional: true
+    description: "분류 모델 fine-tuning (vision-engineer 자문)"
+
+  # --- 평가 ---
+  - skill: vision-engineer
+    mode: 평가
+    handoff: true
+    description: "mAP, confusion matrix, per-class 성능 분석"
+
+  # --- 품질 검증 ---
+  - skill: qa
+    mode: 데이터검증
+    gate: true
+    handoff: true
+    on_reject: vision-engineer
+    max_iterations: 2
+    description: "[강제 체크포인트] 라벨 품질/정확도 검증"
+
+  # --- 결과 집계 + 보고 ---
+  - skill: data-analyst
+    mode: 시각화
+    handoff: true
+    description: "분류 결과 통계 집계 + 시각화"
+
+  - skill: project-manager
+    mode: 보고서
+    handoff: true
+    description: "최종 결과 보고서 작성"
+
+on_failure: retry(2) -> notify_user

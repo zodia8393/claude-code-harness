@@ -1,0 +1,50 @@
+# ============================================================
+# Handoff Envelope (핸드오프 봉투) v1.0
+# 2026-04-16 전 스킬 회의 합의
+# ============================================================
+# 모든 스킬은 작업 종료 시 이 템플릿에 따라 봉투를 작성한다.
+# 파일명: {YYYYMMDD}_{HHMMSS}_{from}_{to}.yaml
+# 예시: 20260416_153000_developer_qa.yaml
+# ============================================================
+
+# --- 필수 필드 ---
+id: ""                      # 고유 ID: {YYYYMMDD}-{HHMMSS}-{from}-{to}
+from: ""                    # 발신 스킬명
+to: ""                      # 수신 스킬명 (또는 "any" — 다음 스킬 미정 시)
+action: ""                  # ready | review | continue | approve | reject | error
+timestamp: ""               # ISO 8601 (예: 2026-04-16T15:30:00)
+
+summary: ""                 # 한 줄 요약: 무엇을 했고 무엇을 넘기는가
+decisions: []               # 이 작업에서 내린 결정 목록 (why 포함)
+artifacts:                  # 산출물 경로 목록
+  - path: ""
+    type: ""                # code | data | report | config | model | image
+expects: ""                 # 수신 스킬에게 기대하는 것
+
+# --- 선택 필드 ---
+context_ref: null           # 선행 핸드오프 ID (체인 추적용)
+risk_notes: []              # 발견된 리스크 (severity: low | mid | high)
+quality_gate:               # 품질 게이트 결과 (qa/client 사용)
+  passed: null              # true | false | null(미검증)
+  checklist: []             # 검증 항목 목록
+
+# --- CV 확장 필드 (vision-engineer/ml-engineer 간 선택 사용) ---
+cv_meta:
+  stage: ""                 # detection | tracking | classification | evaluation | pipeline
+  image_spec:
+    resolution: ""          # 예: "1920x1080"
+    format: ""              # jpg | png | mp4
+    count: 0                # 이미지/프레임 수
+  model_info:
+    name: ""                # 예: "yolo11x-cls"
+    weights: ""             # 가중치 경로
+    conf_threshold: 0.0     # confidence threshold
+  data_path: ""             # 대용량 데이터 경로
+
+# ============================================================
+# 규칙:
+# 1. 핸드오프 단위: 배치(영상 1개 or 디렉토리 1개), 프레임 단위 금지
+# 2. artifacts 경로의 파일 존재 검증은 수신 측 책임
+# 3. cv_meta는 CV 파이프라인 핸드오프 시에만 사용, 일반 스킬은 무시
+# 4. 읽기전용 스킬(qa/client)은 메인 컨텍스트가 대리 작성
+# ============================================================

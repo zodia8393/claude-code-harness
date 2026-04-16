@@ -1,0 +1,44 @@
+# ============================================================
+# Workflow Ledger (워크플로우 상태 대장) v1.0
+# 2026-04-16 전 스킬 회의 합의
+# ============================================================
+# 워크플로우 실행 시 이 템플릿으로 생성.
+# 파일명: {workflow}_{task_id}.yaml
+# 예시: code_impl_fix-parser.yaml
+# ============================================================
+
+workflow: ""                # 워크플로우명 (code_implementation 등)
+task_id: ""                 # 작업 식별자 (사용자 지정 또는 자동 생성)
+started_at: ""              # ISO 8601
+status: ""                  # running | completed | failed | aborted
+current_step: 0             # 현재 진행 중인 step 인덱스 (0-based)
+
+# --- 각 스텝별 기록 (워크플로우 yaml steps 순서대로) ---
+steps:
+  - skill: ""
+    mode: ""
+    started_at: ""
+    completed_at: ""
+    status: ""              # pending | running | passed | failed | skipped
+    handoff_id: ""          # 생성한 핸드오프 봉투 ID (없으면 null)
+    gate_result: null       # gate 스텝일 경우: pass | fail | null
+    notes: ""               # 특이사항 (에러 메시지, 재시도 사유 등)
+
+# --- 요약 (워크플로우 완료 시 작성) ---
+summary:
+  total_steps: 0
+  passed: 0
+  failed: 0
+  skipped: 0
+  duration_minutes: 0
+  final_artifacts: []       # 최종 산출물 경로
+  defects_found: 0          # 발견된 결함 수
+  feedback_loops: 0         # on_reject 발동 횟수
+
+# ============================================================
+# 규칙:
+# 1. 메인 컨텍스트가 워크플로우 시작 시 생성
+# 2. 각 스킬 실행 전후로 해당 step 업데이트
+# 3. 워크플로우 완료 시 summary 작성 후 archive/로 이동
+# 4. inject-context.sh가 running 상태 ledger를 세션 시작 시 참조
+# ============================================================

@@ -1,0 +1,100 @@
+# 검증된 모범 사례
+# Learning Engine이 패턴 분석 후 3회+ 성공 시 등록
+# Season 1 Champion 패턴 포함 (context/best_practices.yaml에서 병합, 2026-03-31)
+
+last_updated: "2026-03-31T00:00:00"
+
+# ─── 워크플로우 모범 사례 ───
+
+workflow:
+  - type: "데이터 전처리"
+    optimal_chain: [data-analyst 프로파일링, developer 구현, qa 데이터검증]
+    success_rate: null  # 데이터 축적 후 갱신
+    sample_size: 0
+    note: "프로파일링 선행이 전처리 오류를 줄임 (프로젝트 경험)"
+
+skill_combination:
+  - skills: [architect, developer]
+    context: "리팩토링"
+    effectiveness: "높음"
+    note: "architect가 방향, developer가 구현 비용 판단 — 과설계 방지"
+
+technology:
+  - tech: "oracledb"
+    vs: "cx_Oracle"
+    verdict: "oracledb 권장"
+    reason: "thin 모드 지원, Oracle Instant Client 불필요"
+
+# ─── Season 1 승격 패턴 (3연승+) ───
+
+promoted_patterns:
+  - id: BP-001
+    skill: developer
+    league: 구현
+    streak: 3
+    pattern_name: "에러 처리 매트릭스 (7가지 상황별 즉시 조치)"
+    why_it_works: "에러 발생 → 유형 분류 → 즉시 조치 경로가 자동화되어 재시도 횟수 최소화"
+    applicable_to: [architect, devops, ml-engineer, qa]
+
+  - id: BP-002
+    skill: data-analyst
+    league: 분석
+    streak: 3
+    pattern_name: "MCAR/MAR/MNAR 결측 분류 + 품질 스코어 가중치 체계"
+    why_it_works: "결측 유형에 따라 처리 전략이 달라지므로, 분류 먼저 → 처리 전략 선택이 정확도를 높임"
+    applicable_to: [ml-engineer, researcher, urban-engineer]
+
+  - id: BP-003
+    skill: trainer
+    league: 커뮤니케이션
+    streak: 3
+    pattern_name: "Bloom's Taxonomy 5축 리뷰 매트릭스"
+    why_it_works: "단순 체크리스트보다 다축 평가가 교육 품질의 다면적 개선을 유도"
+    applicable_to: [office-worker, project-manager, researcher]
+
+  - id: BP-004
+    skill: admin
+    league: 전략
+    streak: 3
+    pattern_name: "규칙 생명주기 (Draft → Candidate → Active → Deprecated)"
+    why_it_works: "규칙의 과잉 축적을 방지하고, 검증되지 않은 규칙이 시스템을 오염시키는 것을 차단"
+    applicable_to: [developer, qa, data-analyst, researcher]
+
+# ─── 챔피언 패턴 (5연승 → 전 리그 공유) ───
+
+champions:
+  - id: CHAMP-001
+    skill: admin
+    league: 전략
+    streak: 5
+    champion_pattern: "PDCA 시스템 사고 + 견고성(4.8)+협력성(4.9) 복합 우위"
+    applicable_insight: "모든 스킬은 자기학습 엔진에서 '규칙 생명주기' 패턴을 참고할 수 있다"
+
+  - id: CHAMP-002
+    skill: trainer
+    league: 커뮤니케이션
+    streak: 5
+    champion_pattern: "Bloom's Taxonomy 기반 교육 체계 + 창의성(4.7) 리그 최고"
+    applicable_insight: "모든 스킬은 출력물 리뷰 시 '5축 리뷰 매트릭스' 패턴을 참고할 수 있다"
+
+  - id: CHAMP-003
+    skill: developer
+    league: 구현
+    streak: 5
+    champion_pattern: "Karpathy Recipe + 6축 코드 진화 진단 + 자기학습 엔진"
+    applicable_insight: "모든 스킬은 코드 작성 시 '에러 처리 매트릭스' + 'Karpathy Recipe' 패턴을 참고할 수 있다"
+
+  - id: CHAMP-004
+    skill: data-analyst
+    league: 분석
+    streak: 5
+    champion_pattern: "Tukey 품질 체계 + MCAR/MAR/MNAR 분류 + 4축 품질 스코어"
+    applicable_insight: "모든 스킬은 데이터 처리 시 '품질 스코어 4축' + '결측 분류' 패턴을 참고할 수 있다"
+
+# ─── 챔피언 후보 ───
+
+pending_champions:
+  - skill: urban-engineer
+    league: 검증
+    streak: 4
+    note: "S2 초반 1승 추가 시 CHAMP-005 등극"

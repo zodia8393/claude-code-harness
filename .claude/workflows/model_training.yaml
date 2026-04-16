@@ -1,0 +1,65 @@
+name: model_training
+owner: admin
+version: 1.2
+trigger: ["모델 학습", "training pipeline", "모델 훈련"]
+description: "데이터 탐색부터 모델 평가·보고까지 전체 학습 파이프라인"
+handoff_enabled: true
+
+entry_conditions:
+  - dataset_ready             # 학습 데이터셋 준비됨
+  - training_goal_defined     # 학습 목표·지표 정의됨
+
+exit_conditions:
+  - metrics_recorded          # 성능 지표 기록됨
+  - next_action_defined       # 후속 조치 결정됨
+
+fallback:
+  - qa_review                 # 실패 시 QA 리뷰 후 재시도
+
+steps:
+  - skill: data-analyst
+    mode: 프로파일링
+    output: data_report
+    handoff: true
+    description: "학습 데이터 품질 검증"
+
+  # --- Tier 3: 조기 검증 (데이터/설계 사전 리뷰) ---
+  - skill: qa
+    mode: 데이터설계검증
+    handoff: true
+    optional: true
+    on_reject: data-analyst
+    max_iterations: 1
+    description: "[조기 검증] 데이터 스키마/분할 전략의 구조적 문제 사전 차단"
+
+  - skill: developer
+    mode: 구현
+    input: data_report
+    handoff: true
+    description: "데이터 로더 구현"
+
+  - skill: ml-engineer
+    mode: 학습
+    input: data_report
+    handoff: true
+    description: "모델 학습 실행"
+
+  - skill: qa
+    mode: 데이터검증
+    gate: true
+    handoff: true
+    on_reject: ml-engineer
+    max_iterations: 2
+    description: "[강제 체크포인트] 학습 결과 품질 검증 (실패 시 중단)"
+
+  - skill: ml-engineer
+    mode: 평가
+    handoff: true
+    description: "모델 성능 평가"
+
+  - skill: project-manager
+    mode: 보고서
+    handoff: true
+    description: "학습 결과 보고서 작성"
+
+on_failure: retry(3) → notify_user

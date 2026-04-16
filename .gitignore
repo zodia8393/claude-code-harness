@@ -1,0 +1,36 @@
+# Environment
+.env
+.env.local
+
+# Runtime data
+.claude/context/skill_usage.log
+.claude/context/decisions.log
+.claude/context/failures.log
+.claude/context/registry/*.jsonl
+.claude/context/state/*.yaml
+!.claude/context/state/LEDGER_TEMPLATE.yaml
+.claude/context/archive/
+.claude/context/meetings/
+
+# Schedule logs
+.claude/schedules/logs/
+.claude/schedules/config.yaml
+
+# Code evolve history
+.claude/code-evolve-*.json
+
+# OS
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# Large files
+*.pt
+*.pth
+*.onnx
+*.bin

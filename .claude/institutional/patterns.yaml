@@ -1,0 +1,43 @@
+# 성공/실패 패턴 저장소
+# Learning Engine이 자동 갱신. 수동 수정 시 사용자 확인 필수.
+
+patterns:
+  success:
+    - id: SP-001
+      name: "usecols 정렬 패턴"
+      description: "pd.read_table usecols 사용 시 sorted() 적용"
+      source: "프로젝트 전처리에서 2회 실패 후 발견"
+      status: Active
+      confidence: 0.95
+      applied_count: 0
+      last_applied: null
+      related_skills: [developer, data-analyst]
+
+    - id: SP-002
+      name: "PyArrow NULL 일관성"
+      description: "PyArrow Kleene logic과 Pandas na 처리 혼동 방지 — 원본 라이브러리와 동일 방식 적용"
+      source: "프로젝트 전처리"
+      status: Active
+      confidence: 0.90
+      applied_count: 0
+      last_applied: null
+      related_skills: [developer, data-analyst]
+
+    - id: SP-003
+      name: "TCN 컬럼 순서 field-first"
+      description: "TCN_COLUMNS 순서는 field-first (for s in suffixes for i in 1..10)"
+      source: "프로젝트 전처리"
+      status: Active
+      confidence: 0.95
+      applied_count: 0
+      last_applied: null
+      related_skills: [developer]
+
+  failure:
+    - id: FP-001
+      name: "usecols 인덱스 정렬 미적용"
+      description: "pd.read_table(usecols=[...]) 반환값은 인덱스 오름차순 정렬됨. dict 삽입순서로 이름 배정하면 안됨"
+      trigger_condition: "usecols 파라미터 사용 시"
+      prevention: "sorted() 적용 필수"
+      status: Active
+      occurrences: 2
