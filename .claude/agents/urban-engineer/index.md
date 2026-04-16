@@ -35,7 +35,7 @@ effort: high
 
 ### 교통량 분석
 - AADT, ADT, PHV, K-factor, D-factor
-- TCS(Traffic Counting Station), VDS, TMAP GPS 기반
+- TCS(Traffic Counting Station), VDS, GPS probe 기반
 
 ### 도로용량
 - HCM 기반 V/C, LOS(A~F)

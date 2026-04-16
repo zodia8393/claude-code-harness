@@ -58,7 +58,7 @@ steps:
     max_iterations: 2
     description: "[강제 체크포인트] 엣지케이스·회귀·보안 최종 검증"
 
-  - skill: commit
-    description: "변경사항 자동 커밋"
+  # Auto-commit is handled by CLAUDE.md Rule 3 (not a separate skill)
+  # After qa gate passes, the main context auto-commits changes
 
 on_failure: notify_user

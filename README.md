@@ -18,7 +18,7 @@ Claude Code를 **17개 전문 스킬 시스템**으로 확장하는 하네스.
 ### 1. 클론
 
 ```bash
-git clone https://github.com/zodia8393/claude-code-harness.git
+git clone https://github.com/YOUR_USERNAME/claude-code-harness.git
 cd your-project
 cp -r claude-code-harness/.claude .
 cp claude-code-harness/CLAUDE.md .
@@ -30,12 +30,13 @@ cp claude-code-harness/.mcp.json .
 **Linux / macOS / WSL:**
 ```bash
 chmod +x .claude/hooks/*.sh
-cp .claude/settings.json .claude/settings.json
+# settings.json은 이미 Linux용으로 설정되어 있습니다
 ```
 
 **Windows (PowerShell):**
 ```powershell
-Copy-Item .claude\settings.windows.json .claude\settings.json
+# Windows용 hooks 설정으로 교체
+Copy-Item .claude\settings.windows.json .claude\settings.json -Force
 ```
 
 ### 3. CLAUDE.md 커스터마이즈

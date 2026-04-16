@@ -32,13 +32,14 @@ steps:
     max_iterations: 2
     description: "[강제 체크포인트] 기존 아키텍처와 호환성·의존성 검증"
 
-  - skill: meeting
+  - skill: admin
+    mode: 회의
     participants: [architect, developer, qa]
     lead: architect
     input: tech_report
     gate: true
     handoff: true
-    description: "기술 도입 여부 스킬 회의"
+    description: "기술 도입 여부 스킬 회의 (admin이 메인 컨텍스트에서 진행)"
 
   - skill: architect
     mode: ADR

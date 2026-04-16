@@ -5,7 +5,7 @@
 | 입력 유형 | 처리 |
 |----------|------|
 | 파일 경로 (.csv, .xlsx, .txt, .dat, .parquet) | `pd.read_csv/read_excel/read_parquet` |
-| DB 테이블명 (STDNN_*, TMAP_* 등) | CLAUDE.md DB 접속정보 → `pd.read_sql` |
+| DB 테이블명 | CLAUDE.md DB 접속정보 → `pd.read_sql` |
 | DataFrame 변수명 | 현재 컨텍스트 참조 |
 | SQL 쿼리 | 쿼리 실행 후 프로파일링 |
 | 디렉토리 경로 | 하위 파일 목록 → 일괄 프로파일링 |

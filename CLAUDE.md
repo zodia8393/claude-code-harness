@@ -72,7 +72,7 @@ Meetings, chaining, and interactive work stay in main context.
 | Training curriculum, educational materials | `/trainer` |
 | Traffic volume, road capacity, transit, transportation planning | `/urban-engineer` |
 | Exercise, nutrition, body composition, supplements | `/health-expert` |
-| Post-implementation auto-cleanup | `/simplify` |
+| Post-implementation review (built-in) | `/simplify` |
 
 ### Workflows (6 — `.claude/workflows/*.yaml`)
 

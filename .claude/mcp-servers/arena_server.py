@@ -12,7 +12,7 @@ from fastmcp import FastMCP
 
 mcp = FastMCP("arena")
 
-CONTEXT_DIR = Path("$PROJECT_ROOT/.claude/context")
+CONTEXT_DIR = Path(os.environ.get("PROJECT_ROOT", ".")) / ".claude" / "context"
 ARENA_FILE = CONTEXT_DIR / "skill_arena.yaml"
 USAGE_LOG = CONTEXT_DIR / "skill_usage.log"
 

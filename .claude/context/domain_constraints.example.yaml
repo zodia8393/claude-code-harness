@@ -44,12 +44,12 @@ traffic:
     note: "교통 밀도. jam density 기준 약 150~200"
     source: "도로용량편람"
 
-# --- CCTV 차종분류 ---
+# --- 영상 차종분류 (예시) ---
 vehicle_classification:
   - field: vehicle_type
-    rule: "value in ['승용', '버스', '트럭', '이륜', '특수', '승합', '경차']"
-    note: "7종 분류 기준 (CCTV 차종분류 프로젝트)"
-    source: "MOLIT 13종 → 7종 매핑"
+    rule: "value in ['sedan', 'bus', 'truck', 'motorcycle', 'special', 'van', 'compact']"
+    note: "Example 7-class classification"
+    source: "Your classification standard"
 
   - field: confidence
     rule: "0 <= x <= 1"
@@ -59,7 +59,7 @@ vehicle_classification:
   - field: bbox_area_ratio
     rule: "0.001 <= x <= 0.5"
     note: "이미지 대비 bbox 면적 비율. 너무 작으면 미탐지, 너무 크면 오탐"
-    source: "vision-engineer 경험값"
+    source: "empirical threshold"
 
 # --- 시간/날짜 ---
 temporal:

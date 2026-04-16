@@ -4,7 +4,7 @@
 
 ### DB 종류 감지 (우선순위)
 1. 요청에 명시 ("Oracle로", "PostgreSQL로")
-2. 테이블명 패턴: STDNN_*, TMAP_* → Oracle
+2. 테이블명 패턴 또는 DB 연결 정보 → 자동 감지
 3. CLAUDE.md 참조
 4. 코드 import문 (oracledb → Oracle)
 5. 불명확 → 사용자 확인

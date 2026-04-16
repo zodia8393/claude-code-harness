@@ -14,13 +14,13 @@ ml-engineer / vision-engineer가 실험 완료 시 1줄 추가.
   "run_id": "r001",
   "timestamp": "2026-04-16T15:00:00",
   "skill": "ml-engineer",
-  "project": "CCTV차종분류",
-  "model": "yolo11x-cls",
-  "dataset": "부평IC_7cls_train",
+  "project": "my-cv-project",
+  "model": "yolov8x-cls",
+  "dataset": "train_7cls_v1",
   "metrics": {
     "accuracy": 0.992,
     "f1_macro": 0.985,
-    "per_class": {"승용": 0.99, "버스": 0.98}
+    "per_class": {"classA": 0.99, "classB": 0.98}
   },
   "params": {
     "epochs": 100,
@@ -29,7 +29,7 @@ ml-engineer / vision-engineer가 실험 완료 시 1줄 추가.
     "lr": 0.001
   },
   "weights_path": "/path/to/best.pt",
-  "notes": "self-training 2라운드 적용",
+  "notes": "fine-tuned with augmentation",
   "status": "completed"
 }
 ```
@@ -51,10 +51,10 @@ qa / client가 결함 발견 시 1줄 추가. (읽기전용 스킬은 메인 컨
   "assignee": "developer",
   "severity": "critical",
   "category": "logic",
-  "summary": "NMS threshold 미적용으로 중복 bbox 발생",
-  "artifact": "/workspace/CCTV차종분류/pipeline/detect.py",
+  "summary": "NMS threshold not applied, duplicate bboxes generated",
+  "artifact": "src/detect.py",
   "line": 142,
-  "reproduce": "conf=0.25, iou=0.45에서 재현",
+  "reproduce": "conf=0.25, iou=0.45 reproduces the issue",
   "status": "open",
   "resolved_by": null,
   "resolved_at": null
@@ -80,9 +80,9 @@ qa / client가 결함 발견 시 1줄 추가. (읽기전용 스킬은 메인 컨
   "reporter": "devops",
   "severity": "high",
   "category": "infra",
-  "summary": "외장 디스크 I/O 병목 — crop 30만장 처리 시 4시간 소요",
-  "impact": "파이프라인 전체 소요시간 2배 증가",
-  "mitigation": "중간 결과를 NVMe로 저장 후 최종만 외장 이동",
+  "summary": "External disk I/O bottleneck — 300K images takes 4 hours",
+  "impact": "Pipeline total duration doubled",
+  "mitigation": "Store intermediate results on SSD, move final to external",
   "status": "open",
   "resolved_at": null
 }
